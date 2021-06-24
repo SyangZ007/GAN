@@ -179,11 +179,11 @@ def train_fun(epochs,gen,disc,is_training=True):
 
         tf.print('current in epoch:{},\ndisc_loss:{},gen_loss:{},gp_loss:{}'.format(epoch,disc_loss.numpy(),gen_loss.numpy(),gp.numpy()))
         #可视化gen
-        generate_and_save_images(gen,batch_z)
+        generate_and_save_images(gen,batch_z,epoch)
     
     return disc_losses,gen_losses,gp_losses   
         
-def generate_and_save_images(model, test_input):
+def generate_and_save_images(model, test_input,epoch):
     # 注意 training` 设定为 False 因此，所有层都在推理模式下运行（batch_norm）。
     predictions = model(test_input, training=False)#(-1,1)
     #tf.print(tf.reduce_max(predictions),tf.reduce_min(predictions))
@@ -193,7 +193,9 @@ def generate_and_save_images(model, test_input):
         plt.subplot(4, 4, i+1)
         plt.imshow(predictions[i])
         plt.axis('off')
-    plt.show()   
+    if epoch%10==0: #每10个epoch保存一次生成图片
+        plt.savefig('image_at_{}_epoch.png'.format(epoch))
+    plt.show()    
 
 if __name__ == '__main__':
     

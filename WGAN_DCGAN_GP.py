@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras import Model,layers
 
-##############################dataset################
+##############################kaggle dataset################
 imgs_path=glob('../input/animefacedataset/images/*.jpg')
 print(len(imgs_path))#63565
-batch_size=64
+batch_size=128
 
 @tf.function
 def preprocess(path):

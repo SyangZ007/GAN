@@ -101,7 +101,7 @@ seed = tf.random.normal([batch_size,100],)#random seed
 gen_opt = tf.keras.optimizers.Adam(2e-4)
 disc_opt = tf.keras.optimizers.Adam(1e-4)#Discriminator学习率低一点，避免鉴别器too strong，生成器无法继续学习
 cross_entropy=tf.keras.losses.BinaryCrossentropy(from_logits=True)
-################loss#####################3
+################ loss ##############################################
 def gp_loss(disc,batch_x,fake_imgs):
     '''使用梯度惩罚的方法替代权值剪裁。需要满足函数在任意位置上的梯度都小于1，根据网络的输入来限制对应判别器的输出。对此我们更新目标函数，添加惩罚项。
         gradient penalty,batch_x:real img [b,h,w,c]
@@ -111,7 +111,7 @@ def gp_loss(disc,batch_x,fake_imgs):
     with tf.GradientTape() as tape:
         #若两个模型概率密度空间没有交集，kl divergence就会失效，梯度不会下降，
         #而Wasserstein距离可以解决这个问题
-        tape.watch([inter])
+        tape.watch([inter])#inter是tensor not tf.variables,需要调用tape.watch()方可对该变量求导
         inter_logits = disc(inter)#将插值的图像输入给discriminator
     grads = tape.gradient(inter_logits,inter)#求偏导
     #grads:[b,h,w,c]>>> [b,-1]求二范数
